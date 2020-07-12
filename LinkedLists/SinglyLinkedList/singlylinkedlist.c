@@ -4,9 +4,11 @@
 
 SinglyLinkedList* this;
 
-Node* push_back(SinglyLinkedList* list, void *data) {	
+SLNode* sl_push_back(SinglyLinkedList* list, void *data) {	
 
-	Node* node = (Node*) malloc(sizeof(Node));
+	if(!list) return NULL;
+
+	SLNode* node = (SLNode*) malloc(sizeof(SLNode));
 	if(node == NULL) {
 		printf("Out of Memory.\n");
 		return NULL;
@@ -26,9 +28,11 @@ Node* push_back(SinglyLinkedList* list, void *data) {
 	return node;
 }
 
-Node* push_front(SinglyLinkedList* list, void *data) {
+SLNode* sl_push_front(SinglyLinkedList* list, void *data) {
 
-	Node *node = (Node*) malloc(sizeof(Node));
+	if(!list) return NULL;
+
+	SLNode *node = (SLNode*) malloc(sizeof(SLNode));
 	if(node == NULL) return NULL; //Out of Memory
 
 	node->data = data;
@@ -43,18 +47,20 @@ Node* push_front(SinglyLinkedList* list, void *data) {
 	return node;	
 }
 
-Node* insert(SinglyLinkedList* list, void *data, int pos) {
+SLNode* sl_insert(SinglyLinkedList* list, void *data, int pos) {
 
-	if(pos >= list->size) return push_back(list, data);
-	if(pos <= 0) 	      return push_front(list, data);
+	if(!list) return NULL;
+
+	if(pos >= list->size) return sl_push_back(list, data);
+	if(pos <= 0) 	      return sl_push_front(list, data);
 	
-	Node *node = (Node*) malloc(sizeof(Node));
+	SLNode *node = (SLNode*) malloc(sizeof(SLNode));
 	if(node == NULL)  return NULL; //Out of Memory
 
 	node->data = data;
 
 	int i = 1;
-	Node* curr_node = list->head;
+	SLNode* curr_node = list->head;
 	while( i < pos ) {
 		curr_node = curr_node->next;
 		++i;
@@ -66,9 +72,9 @@ Node* insert(SinglyLinkedList* list, void *data, int pos) {
 
 }
 
-void pop_back(SinglyLinkedList *list) {
+void sl_pop_back(SinglyLinkedList *list) {
 
-	if(list->size == 0) return;
+	if(!(list && list->size)) return;
 
 	if(list->size == 1) {
 		//list->head = list->end
@@ -81,7 +87,7 @@ void pop_back(SinglyLinkedList *list) {
 
 	//list->head != list->end
 
-	Node* curr_node = list->head;
+	SLNode* curr_node = list->head;
 	while(curr_node->next != list->end) curr_node = curr_node->next;
 	curr_node->next = NULL;
 	free(list->end);
@@ -89,9 +95,9 @@ void pop_back(SinglyLinkedList *list) {
 	list->size = list->size - 1;
 }
 
-void pop_front(SinglyLinkedList *list) {
+void sl_pop_front(SinglyLinkedList *list) {
 
-	if(list->size == 0) return;
+	if(!(list && list->size)) return;
 
 	if(list->size == 1) {
 		//list->head = list->end
@@ -104,25 +110,27 @@ void pop_front(SinglyLinkedList *list) {
 
 	//list->head != list->end
 
-	Node* temp = list->head;
+	SLNode* temp = list->head;
 	list->head = temp->next;
 	list->size = list->size - 1;
 	free(temp);	
 }
 
-void erase(SinglyLinkedList* list, int pos) {
+void sl_erase(SinglyLinkedList* list, int pos) {
+
+	if(!(list && list->size)) return;
 
 	if(pos >= list->size) {
-		pop_back(list);
+		sl_pop_back(list);
 		return;
 	}
 	if(pos <= 0) {
-		pop_front(list);
+		sl_pop_front(list);
 		return;
 	}
 
-	Node* curr_node = list->head;
-	Node* prev = list->head;
+	SLNode* curr_node = list->head;
+	SLNode* prev = list->head;
 	int i = 0;
 	while(curr_node != NULL) {
 		if(pos == i) {
@@ -141,10 +149,12 @@ void erase(SinglyLinkedList* list, int pos) {
 	}	
 }
 
-void remove_if(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
+void sl_remove_if(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
 
-	Node* curr_node = list->head;
-	Node* prev = list->head;
+	if(!(list && list->size)) return;
+
+	SLNode* curr_node = list->head;
+	SLNode* prev = list->head;
 	while(curr_node != NULL) {
 		if(cmp(curr_node->data)) {
 			prev->next = curr_node->next;
@@ -162,13 +172,13 @@ void remove_if(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
 	}	
 }
 
-void reverse(SinglyLinkedList* list) {
+void sl_reverse(SinglyLinkedList* list) {
 	
-	if(list->size <= 1) return;
+	if(!(list && list->size)) return;
 
-	Node* prev_node = list->head;
-	Node* curr_node = prev_node->next;
-	Node* future_node = curr_node->next;
+	SLNode* prev_node = list->head;
+	SLNode* curr_node = prev_node->next;
+	SLNode* future_node = curr_node->next;
 	while(future_node != NULL) {
 		curr_node->next = prev_node;
 		prev_node = curr_node;
@@ -181,9 +191,12 @@ void reverse(SinglyLinkedList* list) {
 	list->head = curr_node;
 }
 
-void erase_duplicates(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
-	Node* iCurr = list->head;
-	Node* prev;
+void sl_erase_duplicates(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
+
+	if(!(list && list->size)) return;
+
+	SLNode* iCurr = list->head;
+	SLNode* prev;
 	int count = 0;
 	while(iCurr != NULL) {
 		if(cmp(iCurr->data)) {
@@ -200,8 +213,11 @@ void erase_duplicates(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
 	}
 }
 
-bool contains(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
-	Node* curr_node = list->head;
+bool sl_contains(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
+
+	if(!(list && list->size)) return false;
+
+	SLNode* curr_node = list->head;
 	while(curr_node != NULL) {
 		if(cmp(curr_node->data)) return true;
 		curr_node = curr_node->next;
@@ -209,18 +225,21 @@ bool contains(SinglyLinkedList* list, bool (*cmp)(const void* data)) {
 	return false;
 }
 
-int size(SinglyLinkedList* list) {
+int sl_size(SinglyLinkedList* list) {
+	if(!(list && list->size)) return 0;
 	return list->size;
 }
 
-bool is_empty(SinglyLinkedList* list) {
+bool sl_is_empty(SinglyLinkedList* list) {
+	if(!(list && list->size)) return true;
 	return list->size == 0;
 }
 
-void clear(SinglyLinkedList* list) {
-	Node* curr_node = list->head;
+void sl_clear(SinglyLinkedList* list) {
+	if(!(list && list->size)) return;
+	SLNode* curr_node = list->head;
 	while(curr_node != NULL) {
-		Node* temp = curr_node;
+		SLNode* temp = curr_node;
 		curr_node = curr_node->next;
 		free(temp);
 	}
@@ -228,8 +247,10 @@ void clear(SinglyLinkedList* list) {
 	list->size = 0;
 }
 
-void swap(SinglyLinkedList* left, SinglyLinkedList* right) {
-	Node* temp = left->head;
+void sl_swap(SinglyLinkedList* left, SinglyLinkedList* right) {
+	if(!(left && right)) return;
+
+	SLNode* temp = left->head;
 	left->head = right->head;
 	right->head = temp;
 
@@ -243,11 +264,13 @@ void swap(SinglyLinkedList* left, SinglyLinkedList* right) {
 }
 
 
-Node* at(SinglyLinkedList* list, int pos) {
+SLNode* sl_at(SinglyLinkedList* list, int pos) {
+	if(!(list && list->size)) return NULL;
+
 	if(pos >= list->size) return list->end;
 	if(pos <= 0) return list->head;
 
-	Node* curr_node = list->head;
+	SLNode* curr_node = list->head;
 	int i = 0;
 	while(i != pos && curr_node != NULL) {
 		curr_node = curr_node->next;
@@ -256,11 +279,13 @@ Node* at(SinglyLinkedList* list, int pos) {
 	return curr_node;
 }
 
-void sort(SinglyLinkedList* list, bool (*cmp)(const void* left, const void* right)) {
-	Node* iCurr = list->head;
+void sl_sort(SinglyLinkedList* list, bool (*cmp)(const void* left, const void* right)) {
+	if(!(list && list->size)) return;
+
+	SLNode* iCurr = list->head;
 	while(iCurr != NULL) {
-		Node* smallest_node = iCurr;
-		Node* jCurr = iCurr->next;
+		SLNode* smallest_node = iCurr;
+		SLNode* jCurr = iCurr->next;
 		while(jCurr != NULL) {
 			if(cmp(jCurr->data, smallest_node->data)) {smallest_node = jCurr;}
 			jCurr = jCurr->next;
@@ -272,7 +297,7 @@ void sort(SinglyLinkedList* list, bool (*cmp)(const void* left, const void* righ
 	}
 }
 
-SinglyLinkedList* new_list() {
+SinglyLinkedList* new_sl_list() {
 
 	SinglyLinkedList *list;
 	list = (SinglyLinkedList*) malloc(sizeof(SinglyLinkedList));

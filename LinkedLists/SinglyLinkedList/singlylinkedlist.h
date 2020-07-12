@@ -8,29 +8,30 @@
 #define False 0
 #define false 0
 
-typedef struct node {
+typedef struct slnode {
 	void* data;
-	struct node* next;
-} Node;
+	struct slnode* next;
+} SLNode;
 
 typedef struct singlylinkedlist {
-	Node* head;
-	Node* end;
+	SLNode* head;
+	SLNode* end;
 	int   size;
 } SinglyLinkedList;
 
-Node* push_back(SinglyLinkedList *list, void *data);
-Node* push_front(SinglyLinkedList *list, void *data);
-Node* insert(SinglyLinkedList *list, void *data, int pos);
-void  pop_back(SinglyLinkedList *list);
-void  pop_front(SinglyLinkedList *list);
-Node* at(SinglyLinkedList *list, int pos);
-void  erase(SinglyLinkedList *list, int pos);
-void  erase_duplicates(SinglyLinkedList *list, bool (*cmp)(const void* data));
-void  reverse(SinglyLinkedList *list);
-void  sort(SinglyLinkedList *list, bool (*cmp)(const void* left, const void* right));
-void  clear(SinglyLinkedList *list);
-bool  is_empty(SinglyLinkedList *list);
-int   size(SinglyLinkedList *list);
-bool  contains(SinglyLinkedList *list, bool (*cmp)(const void* data));
-void  swap(SinglyLinkedList *left, SinglyLinkedList *right);
+SinglyLinkedList* new_sl_list();
+SLNode* 	  sl_push_back(SinglyLinkedList *list, void *data);
+SLNode* 	  sl_push_front(SinglyLinkedList *list, void *data);
+SLNode* 	  sl_insert(SinglyLinkedList *list, void *data, int pos);
+void  		  sl_pop_back(SinglyLinkedList *list);
+void  		  sl_pop_front(SinglyLinkedList *list);
+SLNode* 	  sl_at(SinglyLinkedList *list, int pos);
+void  		  sl_erase(SinglyLinkedList *list, int pos);
+void  		  sl_erase_duplicates(SinglyLinkedList *list, bool (*cmp)(const void* data));
+void  	   	  sl_reverse(SinglyLinkedList *list);
+void  		  sl_sort(SinglyLinkedList *list, bool (*cmp)(const void* left, const void* right));
+void  		  sl_clear(SinglyLinkedList *list);
+bool  		  sl_is_empty(SinglyLinkedList *list);
+int   		  sl_size(SinglyLinkedList *list);
+bool  		  sl_contains(SinglyLinkedList *list, bool (*cmp)(const void* data));
+void  		  sl_swap(SinglyLinkedList *left, SinglyLinkedList *right);
