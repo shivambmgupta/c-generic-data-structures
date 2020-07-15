@@ -1,8 +1,12 @@
+#ifndef DOUBLY_LINKED__C
+#define DOUBLY_LINKED__C
+
 #include <stdio.h>
 #include <malloc.h>
 #include "doublylinkedlist.h"
 
 DoublyLinkedList*  new_dl_list() {
+
 	DoublyLinkedList *list = (DoublyLinkedList*) malloc(sizeof(DoublyLinkedList));
 	if(!list) {
 		return NULL;
@@ -32,7 +36,7 @@ DLNode* dl_push_back(DoublyLinkedList *list, void *data) {
 		fputs(OUT_OF_MEM, stderr);
 		return NULL;
 	}
-	
+
 	if(list->end == NULL) {
 		list->end = node;
 		list->head = node;
@@ -56,14 +60,14 @@ DLNode* dl_push_front(DoublyLinkedList *list, void *data) {
 		fputs(OUT_OF_MEM, stderr);
 		return NULL;
 	}
-	
+
 	if(!list->head) {
 		list->head = node;
 		list->end = node;
 		list->size = list->size + 1;
 		return node;
 	}
-	
+
 	list->head->prev = node;
 	node->next = list->head;
 	list->head = node;
@@ -83,7 +87,7 @@ DLNode* dl_insert(DoublyLinkedList *list, void *data, int pos) {
 		fputs(OUT_OF_MEM, stderr);
 		return NULL;
 	}
-	
+
 	int i = 1;
 	DLNode* curr_node = list->head;
 	while(i < pos) {
@@ -101,6 +105,7 @@ DLNode* dl_insert(DoublyLinkedList *list, void *data, int pos) {
 }
 
 void  dl_pop_back(DoublyLinkedList *list) {
+
 	if(list == NULL || list->size == 0) return;
 
 	if(list->size == 1) {
@@ -119,6 +124,7 @@ void  dl_pop_back(DoublyLinkedList *list) {
 }
 
 void  dl_pop_front(DoublyLinkedList *list) {
+
 	if(list == NULL || list->size == 0) return;
 
 	if(list->size == 1) {
@@ -137,6 +143,7 @@ void  dl_pop_front(DoublyLinkedList *list) {
 }
 
 DLNode* dl_at(DoublyLinkedList *list, int pos) {
+
 	if(!(list && list->size)) return NULL;
 	if(pos >= list->size - 1) return list->end;
 	if(pos <= 0)		  return list->head;
@@ -152,8 +159,8 @@ DLNode* dl_at(DoublyLinkedList *list, int pos) {
 
 void  dl_erase(DoublyLinkedList *list, int pos) {
 
-	if(!(list && list->size)) return NULL;
-	
+	if(!(list && list->size)) return;
+
 	if(pos >= list->size - 1) {
 		dl_pop_back(list);
 		return;
@@ -208,15 +215,16 @@ void dl_erase_node(DoublyLinkedList *list, DLNode* node) {
 			break;
 		}
 		curr_node = curr_node->next;
-	}	
+	}
 }
 
 
 void  dl_erase_duplicates(DoublyLinkedList *list, bool (*cmp)(const void* data)) {
+
 	if(!(list && list->size)) return;
 	int occurences = 0;
-	DLNode* curr_node = list->head; 
-	while(curr_node != NULL) { 
+	DLNode* curr_node = list->head;
+	while(curr_node != NULL) {
 		if(cmp(curr_node->data)) {
 			if(occurences == 0) occurences += 1;
 			else {
@@ -227,11 +235,12 @@ void  dl_erase_duplicates(DoublyLinkedList *list, bool (*cmp)(const void* data))
 			}
 		}
 		curr_node = curr_node->next;
-	}	
+	}
 }
 
 void  dl_reverse(DoublyLinkedList *list) {
-	if(!(list && list->size)) return;	
+
+	if(!(list && list->size)) return;
 	DLNode* curr_node = list->head;
 	DLNode* temp;
 	while(curr_node != NULL) {
@@ -239,7 +248,7 @@ void  dl_reverse(DoublyLinkedList *list) {
 		curr_node = curr_node->next;
 		temp = curr->prev;
 		curr->prev = curr->next;
-		curr->next = temp;	
+		curr->next = temp;
 	}
 	temp = list->head;
 	list->head = list->end;
@@ -247,6 +256,7 @@ void  dl_reverse(DoublyLinkedList *list) {
 }
 
 void  dl_sort(DoublyLinkedList *list, bool (*cmp)(const void* left, const void* right)) {
+
 	if(!(list && list->size)) return;
 	DLNode* iCurr = list->head;
 	while(iCurr != NULL) {
@@ -279,6 +289,7 @@ int   dl_size(DoublyLinkedList *list) {
 }
 
 bool  dl_contains(DoublyLinkedList *list, bool (*cmp)(const void* data)) {
+
 	if(!(list && list->size)) return false;
 	for(DLNode* curr_node = list->head; curr_node != NULL; curr_node = curr_node->next)
 		if(cmp(curr_node->data))
@@ -287,8 +298,9 @@ bool  dl_contains(DoublyLinkedList *list, bool (*cmp)(const void* data)) {
 }
 
 void  dl_swap(DoublyLinkedList *left, DoublyLinkedList *right) {
+
 	if(!(left && right)) return;
-	
+
 	DLNode* temp = left->head;
 	left->head = right->head;
 	right->head = temp;
@@ -301,3 +313,5 @@ void  dl_swap(DoublyLinkedList *left, DoublyLinkedList *right) {
 	left->size = right->size;
 	right->size = size;
 }
+
+#endif

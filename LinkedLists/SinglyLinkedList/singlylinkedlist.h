@@ -1,3 +1,6 @@
+#ifndef SINGLY_LINKED_LIST__H
+#define SINGLY_LINKED_LIST__H
+
 #include <stdio.h>
 
 #define bool int
@@ -8,9 +11,9 @@
 #define False 0
 #define false 0
 
-typedef struct slnode {
+typedef struct __$$__sl_node {
 	void* data;
-	struct slnode* next;
+	struct __$$__sl_node* next;
 } SLNode;
 
 typedef struct singlylinkedlist {
@@ -35,3 +38,5 @@ bool  		  sl_is_empty(SinglyLinkedList *list);
 int   		  sl_size(SinglyLinkedList *list);
 bool  		  sl_contains(SinglyLinkedList *list, bool (*cmp)(const void* data));
 void  		  sl_swap(SinglyLinkedList *left, SinglyLinkedList *right);
+
+#endif

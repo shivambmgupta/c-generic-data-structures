@@ -1,3 +1,6 @@
+#ifndef DOUBLY_LINKED__H
+#define DOUBLY_LINKED__H
+
 #include <stdio.h>
 
 #define bool int
@@ -9,10 +12,10 @@
 #define false 0
 #define OUT_OF_MEM "Out of memory!\n"
 
-typedef struct dlnode {
+typedef struct __$$__dl_node {
 	void* data;
-	struct dlnode* next;
-	struct dlnode* prev;
+	struct __$$__dl_node* next;
+	struct __$$__dl_node* prev;
 } DLNode;
 
 typedef struct Doublylinkedlist {
@@ -39,3 +42,5 @@ bool      	   dl_is_empty(DoublyLinkedList *list);
 int       	   dl_size(DoublyLinkedList *list);
 bool      	   dl_contains(DoublyLinkedList *list, bool (*cmp)(const void* data));
 void      	   dl_swap(DoublyLinkedList *left, DoublyLinkedList *right);
+
+#endif
